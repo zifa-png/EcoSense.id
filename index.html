@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>EcoSense Indonesia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+<link rel="stylesheet" href="css/style.css"/>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo" onclick="showPage('home')">🌿 <span>Eco</span>Sense <small>INDONESIA</small></div>
+  <div class="nav-links">
+    <a onclick="showPage('home')"      id="nav-home"      class="active">Beranda</a>
+    <a onclick="showPage('lapor')"     id="nav-lapor">Laporan</a>
+    <a onclick="showPage('peta')"      id="nav-peta">Peta</a>
+    <a onclick="showPage('dashboard')" id="nav-dashboard">Dashboard</a>
+    <a onclick="showPage('edukasi')"   id="nav-edukasi">Edukasi</a>
+    <a onclick="showPage('poin')"      id="nav-poin">Poin</a>
+  </div>
+  <div class="nav-r">
+    <button class="btn-theme" id="themeBtn" onclick="toggleTheme()">🌙</button>
+    <button class="btn-lapor-nav" onclick="showPage('lapor')">+ Lapor Sekarang</button>
+  </div>
+</nav>
+
+<!-- MOBILE NAV -->
+<div class="mnav">
+  <div class="mni active" id="mnav-home"      onclick="showPage('home')">     <span class="mi">🏠</span>Beranda</div>
+  <div class="mni"        id="mnav-lapor"     onclick="showPage('lapor')">    <span class="mi">📝</span>Lapor</div>
+  <div class="mni"        id="mnav-peta"      onclick="showPage('peta')">     <span class="mi">🗺️</span>Peta</div>
+  <div class="mni"        id="mnav-dashboard" onclick="showPage('dashboard')"><span class="mi">📊</span>Data</div>
+  <div class="mni"        id="mnav-poin"      onclick="showPage('poin')">     <span class="mi">🏆</span>Poin</div>
+</div>
+
+<!-- ===== BERANDA ===== -->
+<div class="page active" id="page-home">
+  <div id="warn-bar" class="warn hidden">
+    <div class="wdot"></div>
+    <span class="wtxt" id="warn-txt"></span>
+    <button class="wclose" onclick="document.getElementById('warn-bar').classList.add('hidden')">✕</button>
+  </div>
+  <div class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-badge"><div class="bdot"></div>Memantau 38 Provinsi Indonesia • Real-time</div>
+    <h1>Jaga <span class="acc">Lingkungan</span><br>Indonesia Bersama</h1>
+    <p class="hero-sub">Platform komunitas pelaporan masalah lingkungan secara real-time. Setiap laporan langsung muncul di peta dan terlihat oleh semua pengguna di seluruh Indonesia.</p>
+    <div class="hero-btns">
+      <button class="btn-p" onclick="showPage('lapor')">📍 Lapor Sekarang</button>
+      <button class="btn-s" onclick="showPage('peta')">🗺️ Lihat Peta</button>
+    </div>
+    <div class="stats-row">
+      <div class="st-item"><span class="st-num" id="s-total">0</span><div class="st-lbl">Total Laporan</div></div>
+      <div class="st-item"><span class="st-num" id="s-week">0</span><div class="st-lbl">Minggu Ini</div></div>
+      <div class="st-item"><span class="st-num" id="s-done">0</span><div class="st-lbl">Ditangani</div></div>
+      <div class="st-item"><span class="st-num" id="s-prov">0</span><div class="st-lbl">Provinsi Aktif</div></div>
+    </div>
+  </div>
+
+  <div class="swrap">
+    <div class="slbl">Isu Nasional</div>
+    <div class="stitle">Masalah Lingkungan<br>Skala Indonesia</div>
+    <div class="isu-grid" id="isu-grid"></div>
+
+    <div class="slbl" style="margin-top:40px">Fitur Unggulan</div>
+    <div class="stitle">Satu Platform,<br>Semua Solusi</div>
+    <div class="feat-grid">
+      <div class="feat-card" onclick="showPage('lapor')"><div class="fi">📝</div><h3>Lapor Mudah</h3><p>Pilih provinsi, kota, kecamatan. Laporan real-time muncul di peta untuk semua pengguna.</p></div>
+      <div class="feat-card" onclick="showPage('peta')"><div class="fi">🗺️</div><h3>Peta Real-time</h3><p>Semua laporan dari seluruh Indonesia tampil langsung di peta interaktif.</p></div>
+      <div class="feat-card" onclick="showPage('dashboard')"><div class="fi">📊</div><h3>Dashboard Bersama</h3><p>Statistik dari semua laporan — total, tren, jenis masalah, papan peringkat.</p></div>
+      <div class="feat-card" onclick="toggleChat()"><div class="fi">🤖</div><h3>AI Konsultan</h3><p>Tanya AI soal isu lingkungan Indonesia kapan saja, gratis dan tanpa batas.</p></div>
+      <div class="feat-card" onclick="showPage('edukasi')"><div class="fi">📚</div><h3>Artikel Edukasi</h3><p>Konten lingkungan untuk pelajar, guru, dan seluruh warga Indonesia.</p></div>
+      <div class="feat-card" onclick="showPage('poin')"><div class="fi">🏆</div><h3>Poin &amp; Sertifikat</h3><p>Kumpulkan poin tiap laporan dan download sertifikat Pahlawan Lingkungan.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== LAPORAN ===== -->
+<div class="page" id="page-lapor">
+  <div class="phdr">
+    <div class="slbl">Form Laporan</div>
+    <h2>Laporkan Masalah Lingkungan</h2>
+    <p>Laporan tersimpan di database dan <strong>langsung muncul di peta</strong> untuk dilihat semua pengguna EcoSense.</p>
+  </div>
+  <div class="fcard">
+    <div class="frow2">
+      <div class="fg">
+        <label class="lbl">Nama Pelapor</label>
+        <input type="text" id="f-nama" placeholder="Nama kamu (opsional)"/>
+      </div>
+    </div>
+
+    <div class="lokasi-box">
+      <div class="lokasi-title">📍 Lokasi Kejadian</div>
+      <div class="frow3">
+        <div class="fg">
+          <label class="lbl">Provinsi *</label>
+          <select id="f-prov" onchange="onProvChange()"><option value="">— Pilih provinsi —</option></select>
+        </div>
+        <div class="fg">
+          <label class="lbl">Kota / Kabupaten *</label>
+          <select id="f-kota" onchange="onKotaChange()" disabled><option value="">— Pilih provinsi dulu —</option></select>
+        </div>
+        <div class="fg">
+          <label class="lbl">Kecamatan *</label>
+          <select id="f-kec" disabled><option value="">— Pilih kota dulu —</option></select>
+        </div>
+      </div>
+      <div class="fg" style="margin-top:8px">
+        <label class="lbl">Alamat Detail</label>
+        <div class="gps-row">
+          <input type="text" id="f-lokasi" placeholder="Cth: Jl. Merdeka No.5, dekat jembatan / pasar..."/>
+          <button class="btn-gps" onclick="getGPS()">📍 GPS</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="frow2">
+      <div class="fg">
+        <label class="lbl">Jenis Masalah *</label>
+        <select id="f-jenis">
+          <option value="">— Pilih jenis masalah —</option>
+          <option>🌫️ Polusi udara / kabut asap</option>
+          <option>🗑️ Sampah liar / tumpukan sampah</option>
+          <option>🌊 Sungai / air tercemar</option>
+          <option>🏭 Limbah industri</option>
+          <option>🌧️ Banjir / genangan</option>
+          <option>🌿 Penebangan / pembakaran hutan</option>
+          <option>🐟 Pencemaran laut / pesisir</option>
+          <option>☢️ Limbah B3 berbahaya</option>
+          <option>⚠️ Lainnya</option>
+        </select>
+      </div>
+      <div class="fg">
+        <label class="lbl">Tingkat Keparahan *</label>
+        <div class="sev-row">
+          <button class="sev-btn" onclick="setSev('ringan',this)">🟢 Ringan</button>
+          <button class="sev-btn" onclick="setSev('sedang',this)">🟡 Sedang</button>
+          <button class="sev-btn" onclick="setSev('parah',this)">🔴 Parah</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="fg">
+      <label class="lbl">Deskripsi Masalah</label>
+      <textarea id="f-desc" placeholder="Ceritakan kondisi yang kamu lihat — sudah berapa lama, dampak ke warga, seberapa parah..."></textarea>
+    </div>
+
+    <button class="btn-submit" id="btn-submit" onclick="submitLaporan()">📤 Kirim Laporan ke Peta</button>
+    <div class="toast" id="toast"></div>
+  </div>
+</div>
+
+<!-- ===== PETA ===== -->
+<div class="page" id="page-peta">
+  <div class="peta-ctrl">
+    <button class="fbtn active" onclick="filterMap('semua',this)">Semua</button>
+    <button class="fbtn fp"    onclick="filterMap('parah',this)">🔴 Parah</button>
+    <button class="fbtn fs"    onclick="filterMap('sedang',this)">🟡 Sedang</button>
+    <button class="fbtn"       onclick="filterMap('ringan',this)">🟢 Ringan</button>
+    <button class="fbtn"       onclick="filterMap('polusi',this)">🌫️ Polusi</button>
+    <button class="fbtn"       onclick="filterMap('sampah',this)">🗑️ Sampah</button>
+    <button class="fbtn"       onclick="filterMap('hutan',this)">🌿 Hutan</button>
+    <input class="search-peta" id="search-peta" placeholder="🔍 Cari provinsi / kota..." oninput="searchMap()"/>
+  </div>
+  <div id="peta-empty" class="peta-empty">
+    <div style="font-size:52px;margin-bottom:12px">🗺️</div>
+    <div style="font-size:16px;font-weight:700;margin-bottom:6px">Peta masih kosong</div>
+    <div style="font-size:13px;color:var(--text2);margin-bottom:16px">Jadilah yang pertama melaporkan masalah lingkungan!</div>
+    <button class="btn-p" onclick="showPage('lapor')">📍 Buat Laporan Pertama</button>
+  </div>
+  <div id="map"></div>
+</div>
+
+<!-- ===== DASHBOARD ===== -->
+<div class="page" id="page-dashboard">
+  <div class="slbl">Statistik Real-time • Semua Pengguna</div>
+  <div class="stitle">Dashboard Lingkungan Indonesia</div>
+  <div class="metrics-grid">
+    <div class="met-card"><div class="met-lbl">Total Laporan</div><div class="met-val" id="m-total">0</div><div class="met-sub">dari semua pengguna</div></div>
+    <div class="met-card"><div class="met-lbl">Laporan Minggu Ini</div><div class="met-val" id="m-week">0</div><div class="met-sub">7 hari terakhir</div></div>
+    <div class="met-card"><div class="met-lbl">Sudah Ditangani</div><div class="met-val" id="m-done">0</div><div class="met-sub">terverifikasi selesai</div></div>
+    <div class="met-card"><div class="met-lbl">Provinsi Aktif</div><div class="met-val" id="m-prov">0</div><div class="met-sub">dari 38 provinsi</div></div>
+  </div>
+  <div id="dash-empty" class="dash-empty">
+    <div style="font-size:48px;margin-bottom:12px">📊</div>
+    <div style="font-size:15px;font-weight:700;margin-bottom:6px">Belum ada data</div>
+    <div style="font-size:13px;color:var(--text2);margin-bottom:16px">Dashboard otomatis terisi saat laporan mulai masuk.</div>
+    <button class="btn-p" onclick="showPage('lapor')">📍 Kirim Laporan Pertama</button>
+  </div>
+  <div id="dash-charts" style="display:none">
+    <div class="chart-grid">
+      <div class="ch-card"><h3>Tren Laporan Mingguan</h3><div style="position:relative;height:220px"><canvas id="chartLine"></canvas></div></div>
+      <div class="ch-card"><h3>Jenis Masalah</h3><div style="position:relative;height:220px"><canvas id="chartDonut"></canvas></div></div>
+    </div>
+    <div class="ch-card" style="margin-top:14px"><h3>Laporan per Pulau</h3><div style="position:relative;height:200px"><canvas id="chartBar"></canvas></div></div>
+    <div class="lb"><h3>🏆 Papan Peringkat Pelapor Terbaik</h3><div id="lb-list"></div></div>
+  </div>
+</div>
+
+<!-- ===== EDUKASI ===== -->
+<div class="page" id="page-edukasi">
+  <div class="slbl">Pusat Edukasi</div>
+  <div class="stitle">Artikel Lingkungan Hidup</div>
+  <p style="color:var(--text2);font-size:14px">Konten pendidikan lingkungan untuk pelajar, guru, dan seluruh warga Indonesia.</p>
+  <div class="edu-grid">
+    <div class="edu-card" onclick="openEdu(0)"><div class="edu-thumb" style="background:linear-gradient(135deg,#1a2e1a,#2d4a2d)">🗑️</div><div class="edu-body"><span class="edu-tag">Sampah</span><h3>Cara Pilah Sampah yang Benar</h3><p>Panduan memilah sampah organik, anorganik, dan B3 di rumah.</p></div></div>
+    <div class="edu-card" onclick="openEdu(1)"><div class="edu-thumb" style="background:linear-gradient(135deg,#1a1a2e,#2a2a45)">🌫️</div><div class="edu-body"><span class="edu-tag">Polusi Udara</span><h3>Bahaya Kabut Asap &amp; Karhutla</h3><p>Dampak kebakaran hutan dan cara melindungi keluarga.</p></div></div>
+    <div class="edu-card" onclick="openEdu(2)"><div class="edu-thumb" style="background:linear-gradient(135deg,#0d2535,#1a4a6a)">💧</div><div class="edu-body"><span class="edu-tag">Air Bersih</span><h3>Menjaga Sumber Air Indonesia</h3><p>Pencemaran Citarum, Siak, Musi dan peran warga.</p></div></div>
+    <div class="edu-card" onclick="openEdu(3)"><div class="edu-thumb" style="background:linear-gradient(135deg,#1a2a10,#2d4a18)">🌴</div><div class="edu-body"><span class="edu-tag">Hutan</span><h3>Deforestasi &amp; Krisis Hutan Tropis</h3><p>Mengapa hutan Indonesia harus dilindungi bersama.</p></div></div>
+    <div class="edu-card" onclick="openEdu(4)"><div class="edu-thumb" style="background:linear-gradient(135deg,#0d1f35,#1a3a5a)">🌊</div><div class="edu-body"><span class="edu-tag">Laut &amp; Pesisir</span><h3>Krisis Sampah Plastik di Laut</h3><p>Indonesia penyumbang sampah plastik laut terbesar di dunia.</p></div></div>
+    <div class="edu-card" onclick="openEdu(5)"><div class="edu-thumb" style="background:linear-gradient(135deg,#1a2e1a,#0d3d1a)">🌿</div><div class="edu-body"><span class="edu-tag">Jejak Karbon</span><h3>Jejak Karbon &amp; Perubahan Iklim</h3><p>Cara mengurangi jejak karbon mulai dari rumah.</p></div></div>
+  </div>
+</div>
+<div class="modal-ov" id="edu-ov" onclick="closeEduOv(event)">
+  <div class="modal"><button class="modal-x" onclick="closeEduBtn()">✕</button><div id="edu-content"></div></div>
+</div>
+
+<!-- ===== POIN ===== -->
+<div class="page" id="page-poin">
+  <div class="slbl">Gamifikasi</div>
+  <div class="stitle">Poin &amp; Penghargaan</div>
+  <div class="poin-profile">
+    <div class="avatar">🌿</div>
+    <div class="poin-info">
+      <h3 id="poin-nama">Warga EcoSense Indonesia</h3>
+      <p>Pelapor aktif lingkungan hidup nasional</p>
+      <div class="poin-big" id="poin-angka">0</div>
+      <div style="font-size:13px;color:var(--text2);margin-top:4px">poin — Level: <strong id="poin-level">Pemula Hijau</strong></div>
+      <div class="prog-wrap"><div class="prog-fill" id="poin-bar" style="width:0%"></div></div>
+      <div style="font-size:11px;color:var(--text3);margin-top:5px" id="poin-next"></div>
+    </div>
+  </div>
+  <div class="slbl" style="margin-bottom:12px">Koleksi Badge</div>
+  <div class="badge-grid" id="badge-grid"></div>
+  <div class="cert-sec">
+    <h3>🏅 Sertifikat Digital Pahlawan Lingkungan</h3>
+    <p>Download sertifikat resmi sebagai bukti kontribusimu menjaga lingkungan Indonesia.</p>
+    <button class="btn-cert" onclick="generateCert()">⬇️ Download Sertifikat PNG</button>
+    <canvas id="cert-canvas" width="800" height="500"></canvas>
+  </div>
+</div>
+
+<!-- AI CHAT (floating) -->
+<button class="chat-fab" onclick="toggleChat()">🤖</button>
+<div class="chat-win" id="chat-win">
+  <div class="chat-head">
+    <div class="chdot"></div>
+    <div><div class="ch-title">AI Konsultan Lingkungan</div><div class="ch-sub">EcoSense Indonesia • Gratis</div></div>
+    <button class="ch-close" onclick="toggleChat()">✕</button>
+  </div>
+  <div class="chat-msgs" id="chat-msgs">
+    <div class="msg bot">Halo! Saya AI Konsultan Lingkungan EcoSense 🌿 Tanya apa saja soal lingkungan hidup Indonesia!</div>
+  </div>
+  <div class="quick-q">
+    <span class="qq" onclick="sendQ('Bahaya kabut asap karhutla?')">Bahaya karhutla?</span>
+    <span class="qq" onclick="sendQ('Cara kurangi sampah plastik?')">Kurangi plastik?</span>
+    <span class="qq" onclick="sendQ('Apa itu deforestasi?')">Deforestasi?</span>
+  </div>
+  <div class="chat-foot">
+    <input class="chat-in" id="chat-in" placeholder="Tanya soal lingkungan..." onkeydown="if(event.key==='Enter')sendChat()"/>
+    <button class="chat-send" onclick="sendChat()">➤</button>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+<script src="js/script.js"></script>
+</body>
+</html>
