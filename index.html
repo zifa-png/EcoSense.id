@@ -12,7 +12,9 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-<link rel="stylesheet" href="style.css">
+<!-- EmailJS dimuat SEBELUM script.js agar sudah tersedia saat dipakai -->
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<link rel="stylesheet" href="style.css"/>
 </head>
 <body>
 
@@ -204,6 +206,23 @@
     </div>
     <div class="ch-card" style="margin-top:14px"><h3>Laporan per Pulau</h3><div style="position:relative;height:200px"><canvas id="chartBar"></canvas></div></div>
     <div class="lb"><h3>🏆 Papan Peringkat Pelapor Terbaik</h3><div id="lb-list"></div></div>
+
+    <!-- ===== ZONA ADMIN: RESET DATA ===== -->
+    <div style="margin-top:28px;padding:20px;background:rgba(255,92,92,.05);border:1px solid rgba(255,92,92,.2);border-radius:14px;text-align:center">
+      <div style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#ff5c5c;font-weight:700;margin-bottom:4px">⚠️ Zona Admin</div>
+      <div style="font-size:12px;color:rgba(255,92,92,.6);margin-bottom:14px">Hanya untuk admin — hapus semua data dan mulai dari nol</div>
+      <button
+        id="btn-reset-data"
+        onclick="resetSemuaData()"
+        style="background:rgba(255,92,92,.12);border:1px solid rgba(255,92,92,.35);color:#ff5c5c;padding:11px 24px;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s;letter-spacing:.02em"
+        onmouseover="this.style.background='rgba(255,92,92,.22)'"
+        onmouseout="this.style.background='rgba(255,92,92,.12)'">
+        🗑️ Reset Semua Data (Mulai dari Nol)
+      </button>
+      <div style="font-size:11px;color:rgba(255,92,92,.45);margin-top:8px">Menghapus semua laporan dari Firebase + reset statistik &amp; poin lokal</div>
+    </div>
+    <!-- ===== END ZONA ADMIN ===== -->
+
   </div>
 </div>
 
@@ -271,8 +290,6 @@
     <button class="chat-send" onclick="sendChat()">➤</button>
   </div>
 </div>
-
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 
 <script src="script.js"></script>
 </body>
