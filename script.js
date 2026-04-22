@@ -13,7 +13,7 @@ var GROQ_KEY = "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";
 // ===== EMAILJS CONFIG =====
 var EMAILJS_PUBLIC_KEY  = 'bOrJ-hbWJJVE2q-Xy';
 var EMAILJS_SERVICE_ID  = 'service_9qsw0c9';
-var EMAILJS_TEMPLATE_ID = 'template_orfv81g';
+var EMAILJS_TEMPLATE_ID = 'template_7gztwqr';
 var EMAIL_TUJUAN        = 'ecosense.id28@gmail.com';
 
 // Init EmailJS segera setelah script dimuat
