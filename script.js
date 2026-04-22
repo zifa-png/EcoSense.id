@@ -593,7 +593,8 @@ var charts = {};
 var chatHist = [];
 var homeAiHist = [];
 var isDark = true;
-var poinLokal = parseInt(localStorage.getItem('eco_poin') || '0');
+var poinLokal = 0;
+try { poinLokal = parseInt(localStorage.getItem('eco_poin') || '0'); } catch(e) { poinLokal = 0; }
 
 // ===== FIREBASE REALTIME LISTENER =====
 // Data bersama semua pengguna via Firebase Firestore
@@ -770,7 +771,7 @@ function submitLaporan() {
 
   // === Update poin langsung ===
   poinLokal += 15;
-  localStorage.setItem('eco_poin', String(poinLokal));
+  try { localStorage.setItem('eco_poin', String(poinLokal)); } catch(e) {}
 
   // === Reset form LANGSUNG ===
   resetForm();
