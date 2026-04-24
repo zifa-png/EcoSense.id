@@ -55,7 +55,7 @@
     <div class="hero-bg"></div>
     <div class="hero-badge"><div class="bdot"></div>Memantau 38 Provinsi Indonesia • Real-time</div>
     <h1>Jaga <span class="acc">Lingkungan</span><br>Indonesia Bersama</h1>
-    <p class="hero-sub">Platform komunitas pelaporan masalah lingkungan secara real-time. Setiap laporan langsung muncul di peta dan terlihat oleh semua pengguna di seluruh Indonesia.</p>
+    <p class="hero-sub">EcoSense adalah platform yang dapat membantu masyarakat melaporkan masalah lingkungan dan ikut jadi bagian dari perubahan.</p>
     <div class="hero-btns">
       <button class="btn-p" onclick="showPage('lapor')">📍 Lapor Sekarang</button>
       <button class="btn-s" onclick="showPage('peta')">🗺️ Lihat Peta</button>
@@ -74,14 +74,14 @@
     <div class="isu-grid" id="isu-grid"></div>
 
     <div class="slbl" style="margin-top:40px">Fitur Unggulan</div>
-    <div class="stitle">Satu Platform,<br>Semua Solusi</div>
+    <div class="stitle">Tempat untuk Lapor<br>dan Berkontribusi</div>
     <div class="feat-grid">
-      <div class="feat-card" onclick="showPage('lapor')"><div class="fi">📝</div><h3>Lapor Mudah</h3><p>Pilih provinsi, kota, kecamatan. Laporan real-time muncul di peta untuk semua pengguna.</p></div>
+      <div class="feat-card" onclick="showPage('lapor')"><div class="fi">📝</div><h3>Lapor Mudah</h3><p>Pilih provinsi, kota, kecamatan. Laporan muncul di peta untuk semua pengguna.</p></div>
       <div class="feat-card" onclick="showPage('peta')"><div class="fi">🗺️</div><h3>Peta Real-time</h3><p>Semua laporan dari seluruh Indonesia tampil langsung di peta interaktif.</p></div>
-      <div class="feat-card" onclick="showPage('dashboard')"><div class="fi">📊</div><h3>Dashboard Bersama</h3><p>Statistik dari semua laporan — total, tren, jenis masalah, papan peringkat.</p></div>
-      <div class="feat-card" onclick="toggleChat()"><div class="fi">🤖</div><h3>AI Konsultan</h3><p>Tanya AI soal isu lingkungan Indonesia kapan saja, gratis dan tanpa batas.</p></div>
+      <div class="feat-card" onclick="showPage('dashboard')"><div class="fi">📊</div><h3>Dashboard</h3><p>Statistik dari semua laporan,total, tren, jenis masalah, papan peringkat.</p></div>
+      <div class="feat-card" onclick="toggleChat()"><div class="fi">🤖</div><h3>AI Konsultan</h3><p>Tanya AI soal lingkungan Indonesia kapan saja, gratis dan tanpa batas.</p></div>
       <div class="feat-card" onclick="showPage('edukasi')"><div class="fi">📚</div><h3>Artikel Edukasi</h3><p>Konten lingkungan untuk pelajar, guru, dan seluruh warga Indonesia.</p></div>
-      <div class="feat-card" onclick="showPage('poin')"><div class="fi">🏆</div><h3>Poin &amp; Sertifikat</h3><p>Kumpulkan poin tiap laporan dan download sertifikat Pahlawan Lingkungan.</p></div>
+      <div class="feat-card" onclick="showPage('poin')"><div class="fi">🏆</div><h3>Poin &amp; Sertifikat</h3><p>Kumpulkan poin tiap laporan dan dapatkan serta download sertifikat Pahlawan Lingkungan.</p></div>
     </div>
   </div>
 </div>
@@ -97,7 +97,7 @@
     <div class="frow2">
       <div class="fg">
         <label class="lbl">Nama Pelapor</label>
-        <input type="text" id="f-nama" placeholder="Nama kamu (opsional)"/>
+        <input type="text" id="f-nama" placeholder="Nama kamu"/>
       </div>
     </div>
 
@@ -154,7 +154,7 @@
 
     <div class="fg">
       <label class="lbl">Deskripsi Masalah</label>
-      <textarea id="f-desc" placeholder="Ceritakan kondisi yang kamu lihat — sudah berapa lama, dampak ke warga, seberapa parah..."></textarea>
+      <textarea id="f-desc" placeholder="Ceritakan kondisi yang kamu lihat dan sudah berapa lama, dampak ke warga, seberapa parah..."></textarea>
     </div>
 
     <button class="btn-submit" id="btn-submit" onclick="submitLaporan()">📤 Kirim Laporan ke Peta</button>
